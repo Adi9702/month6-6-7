@@ -1,5 +1,7 @@
 import json 
 
+# тут соединение с вебсокетом 
+
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -11,7 +13,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user = self.scope.get("user")
         self.chat_id = self.scope["url_route"]["kwargs"]["chat_id"]
         self.group_name = f"chat_{self.chat_id}"
-
+# scope - это 
         if not self.user or not self.user.is_authenticated:
             await self.close(code=4001)
             return

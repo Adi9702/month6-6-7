@@ -1,9 +1,7 @@
-from urllib.parse import parse_qs
 
+from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from channels.middleware import BaseMiddleware
-from django.contrib.auth.models import AnonymousUser
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class QueryParamJWTAuthMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
@@ -16,6 +14,10 @@ class QueryParamJWTAuthMiddleware(BaseMiddleware):
 
     @database_sync_to_async
     def get_user(self, raw_token):
+        # Ленивая загрузка импортов, чтобы Django apps уже были готовы
+        from django.contrib.auth.models import AnonymousUser
+        from rest_framework_simplejwt.authentication import JWTAuthentication
+
         if not raw_token:
             return AnonymousUser()
 
